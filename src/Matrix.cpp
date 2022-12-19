@@ -11,22 +11,27 @@
 // akon te jako veseli onda mozes paralizaciju
 // std::thread
 
+matrix::Matrix::Matrix(std::vector<std::vector<int>> _elements)
+    : elements(_elements),
+      rows(_elements.size()),
+      cols(_elements[0].size()){};
+
 bool matrix::Matrix::isValid(int x, int y) const
 {
-    return (x >= 0 && x < this->data.size() &&
-            y >= 0 && y < this->data[0].size());
+    return (x >= 0 && x < this->rows &&
+            y >= 0 && y < this->cols);
 }
 
 void matrix::Matrix::markAsProcessed(int x, int y)
 {
     // variant using special value '2' to mark processed elements
-    this->data[x][y] = 2;
+    this->elements[x][y] = 2;
 }
 
 bool matrix::Matrix::isProcessed(int x, int y) const
 {
     // variant using special values
-    return this->data[x][y] == 2;
+    return this->elements[x][y] == 2;
 }
 
 void matrix::Matrix::findAllNeighbours(int x, int y)
@@ -62,17 +67,17 @@ void matrix::Matrix::findAllNeighbours(int x, int y)
 
 int matrix::Matrix::countFigures()
 {
-    if (this->data.empty())
+    if (this->elements.empty())
     {
         return 0;
     }
 
     int count = 0;
-    for (int x = 0; x < this->data.size(); ++x)
+    for (int x = 0; x < this->rows; ++x)
     { // i
-        for (int y = 0; y < this->data[0].size(); ++y)
+        for (int y = 0; y < this->cols; ++y)
         { // j
-            if (this->data[x][y] == 1 && !isProcessed(x, y))
+            if (this->elements[x][y] == 1 && !isProcessed(x, y))
             {
                 ++count;
                 findAllNeighbours(x, y);
