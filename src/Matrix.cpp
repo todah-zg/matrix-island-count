@@ -1,8 +1,6 @@
 #include "Matrix.h"
 #include <queue>
 
-// TODO snake_case (mozda i za ime klase)
-// TODO vidjet za linter...
 // TODO tests
 // TODO comments
 // TODO enum
@@ -16,53 +14,86 @@ matrix::Matrix::Matrix(std::vector<std::vector<int>> _elements)
       rows(_elements.size()),
       cols(_elements[0].size()){};
 
-bool matrix::Matrix::isValid(int x, int y) const
-{
-    return (x >= 0 && x < this->rows &&
-            y >= 0 && y < this->cols);
+matrix::FastMatrix::FastMatrix(std::vector<std::vector<int>> _elements)
+    : Matrix(_elements), elementsBackup(_elements){};
+
+matrix::LeanMatrix::LeanMatrix(std::vector<std::vector<int>> _elements)
+    : Matrix(_elements){};
+
+bool matrix::Matrix::isSet(position_t position) {
+    this->elements[position.x][position.y] == 1;
 }
 
-void matrix::Matrix::markAsProcessed(int x, int y)
+bool matrix::Matrix::isValidPosition(position_t position) const
 {
-    // variant using special value '2' to mark processed elements
-    this->elements[x][y] = 2;
+    return (position.x >= 0 && position.x < this->rows &&
+            position.y >= 0 && position.y < this->cols);
 }
 
-bool matrix::Matrix::isProcessed(int x, int y) const
+void matrix::Matrix::markAsProcessed(position_t position)
 {
-    // variant using special values
-    return this->elements[x][y] == 2;
+    this->elements[position.x][position.y] = 2;
 }
 
-void matrix::Matrix::findAllNeighbours(int x, int y)
-{ // mozda const
-    // uses BFS to find all connected elements (for now)
+bool matrix::Matrix::alreadyProcessed(position_t position) const
+{
+    return this->elements[position.x][position.y] == 2;
+}
 
-    // taken 2 by 2, these values cover all neighbouring position offsets
-    int offset[] = {0, 1, 0, -1, 0}; // TODO 2 varijable
+std::vector<position_t> getNeighbourElements(position_t position)
+{
+    int offset_x[] = {0, 0, -1, 1};
+    int offset_y[] = {-1, 1, 0, 0};
+    int offset_steps = 4;
+    std::vector<position_t> neighbours;
 
-    std::queue<std::pair<int, int>> searchQueue;
-    searchQueue.emplace(x, y);
+    for (int i = 0; i < offset_steps; ++i)
+    {
+        position_t newPosition;
+        newPosition.x = position.x + offset_x[i];
+        newPosition.y = position.y + offset_y[i];
+        neighbours.push_back(newPosition);
+    }
 
-    this->markAsProcessed(x, y);
+    return neighbours;
+}
+
+void matrix::Matrix::processAllConnectedElements(position_t startPosition)
+{
+
+    std::queue<position_t> searchQueue;
+    searchQueue.push(startPosition);
+    markAsProcessed(startPosition);
 
     while (!searchQueue.empty())
     {
-        int row = searchQueue.front().first;
-        int col = searchQueue.front().second;
+        position_t position = searchQueue.front();
         searchQueue.pop();
 
-        for (int i = 0; i < 4; ++i)
-        { // 4 -> velicina offseta
-            int new_x = x + offset[i];
-            int new_y = y + offset[i + 1];
-            if (isValid(new_x, new_y) && !isProcessed(new_x, new_y))
+        for (auto curPosition : getNeighbourElements(position))
+        {
+            if (isValidPosition(curPosition) && !alreadyProcessed(curPosition))
             {
-                markAsProcessed(new_x, new_y);
-                searchQueue.emplace(new_x, new_y);
+                markAsProcessed(curPosition);
+                searchQueue.push(curPosition);
             }
         }
     }
+}
+
+std::vector<position_t> matrix::Matrix::getAllElementPositions() {
+    
+    std::vector<position_t> positions;
+    for (int x = 0; x < this->rows; ++x)
+    { // i
+        for (int y = 0; y < this->cols; ++y)
+        { // j
+            position_t pos = {x, y};
+            positions.push_back(pos);
+        }
+    }
+    
+    return positions;
 }
 
 int matrix::Matrix::countFigures()
@@ -73,15 +104,10 @@ int matrix::Matrix::countFigures()
     }
 
     int count = 0;
-    for (int x = 0; x < this->rows; ++x)
-    { // i
-        for (int y = 0; y < this->cols; ++y)
-        { // j
-            if (this->elements[x][y] == 1 && !isProcessed(x, y))
-            {
-                ++count;
-                findAllNeighbours(x, y);
-            }
+    for (auto position : getAllElementPositions()) {
+        if (isSet(position) && !alreadyProcessed(position)) {
+            ++count;
+            processAllConnectedElements(position);
         }
     }
 

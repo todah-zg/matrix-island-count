@@ -3,9 +3,12 @@
 
 #include <vector>
 
+typedef struct {
+    int x;
+    int y;
+} position_t;
 namespace matrix
 {
-
     class Matrix
     {
     private:
@@ -13,16 +16,34 @@ namespace matrix
         const int rows;
         const int cols;
 
-        bool isValid(int x, int y) const;
-        void findAllNeighbours(int x, int y);
-        void markAsProcessed(int x, int y);
-        bool isProcessed(int x, int y) const;
+        bool isSet(position_t);
+        bool isValidPosition(position_t) const;
+        bool alreadyProcessed(position_t) const;
+        std::vector<position_t> getNeighbourElements(position_t);
+        void processAllConnectedElements(position_t);
+        void markAsProcessed(position_t);
+        void reset();
 
     public:
         Matrix(std::vector<std::vector<int>>);
+        std::vector<position_t> getAllElementPositions();
         int countFigures();
     };
 
+    class FastMatrix : public Matrix
+    {
+    private:
+        std::vector<std::vector<int>> elementsBackup;
+
+    public:
+        FastMatrix(std::vector<std::vector<int>>);
+    };
+
+    class LeanMatrix : public Matrix
+    {
+    public:
+        LeanMatrix(std::vector<std::vector<int>>);
+    };
 } // namespace matrix
 
 #endif
