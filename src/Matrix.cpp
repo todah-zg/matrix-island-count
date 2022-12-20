@@ -21,7 +21,7 @@ matrix::LeanMatrix::LeanMatrix(std::vector<std::vector<int>> _elements)
     : Matrix(_elements){};
 
 bool matrix::Matrix::isSet(position_t position) {
-    this->elements[position.x][position.y] == 1;
+    return this->elements[position.x][position.y] == 1;
 }
 
 bool matrix::Matrix::isValidPosition(position_t position) const
