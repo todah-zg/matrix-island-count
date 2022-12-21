@@ -17,8 +17,10 @@
 
 matrix::Matrix::Matrix(const std::vector<std::vector<int>> &_elements)
     : mElements(_elements),
-      mRows(_elements.size()),
-      mCols(_elements[0].size()){};
+      mRows(_elements.empty() ? 0 : _elements.size()),
+      mCols(_elements.empty() ? 0 : _elements[0].size()) {}
+
+// matrix::Matrix::~Matrix(){}
 
 bool matrix::Matrix::isSet(const matrix::position_t &position) const
 {
