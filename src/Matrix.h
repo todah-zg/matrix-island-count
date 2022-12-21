@@ -21,6 +21,16 @@ namespace matrix
 {
 
     /**
+     * @brief Simple Enum to hold matrix element state. Unscoped for simplicity.
+     * 
+     */
+    enum State {
+        unset,
+        set,
+        visited
+    };
+
+    /**
      * @brief Simple struct to track position in a 2D matrix
      *
      */
@@ -124,9 +134,27 @@ namespace matrix
          * @brief Returns the string representation of the 2D matrix
          *
          */
-        std::string getString();
+        std::string getString() const;
+
+        /**
+         * @brief Allow direct output to std::cout
+         * 
+         * @param s 
+         * @param matrix 
+         * @return std::ostream& 
+         */
+        friend std::ostream& operator<<(std::ostream &s, const Matrix &matrix);
 
     }; // class Matrix
+
+    /**
+     * @brief operator<< overload to allow outputting Matrix objects to cout
+     * 
+     * @param s 
+     * @param matrix 
+     * @return std::ostream& 
+     */
+    std::ostream& operator<<(std::ostream &s, const Matrix &matrix);
 
     /**
      * @brief Matrix implementation that perserves the original state by creating
@@ -187,22 +215,6 @@ namespace matrix
     {
 
     private:
-        /**
-         * @brief Check if the given position has already been visited.
-         *
-         * @param position
-         * @return true
-         * @return false
-         */
-        bool isProcessed(const position &position) const override;
-
-        /**
-         * @brief Mark a given position as already processed.
-         *        Temporarily changes mElements.
-         *
-         * @param position
-         */
-        void markAsProcessed(const position &position) override;
 
         /**
          * @brief Resets the original state of the mElements
@@ -211,6 +223,12 @@ namespace matrix
         void reset();
 
     public:
+
+        /**
+         * @brief Construct a new Lean Matrix object
+         * 
+         * @param elements 
+         */
         LeanMatrix(const std::vector<std::vector<int>> &elements);
 
         /**

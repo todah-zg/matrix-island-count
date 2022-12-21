@@ -17,8 +17,8 @@ enable_testing()
 
 add_executable(
   matrix_test
-  test/matrix_test.cc
   src/Matrix.cpp
+  test/matrix_test.cc
 )
 target_link_libraries(
   matrix_test

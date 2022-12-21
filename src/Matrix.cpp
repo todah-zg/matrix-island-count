@@ -116,7 +116,7 @@ int matrix::Matrix::countFigures()
     return count;
 }
 
-std::string matrix::Matrix::getString()
+std::string matrix::Matrix::getString() const
 {
     std::stringstream ss;
 
@@ -140,6 +140,12 @@ std::string matrix::Matrix::getString()
     }
     return ss.str();
 }
+
+std::ostream& matrix::operator<<(std::ostream &s, const matrix::Matrix &m)
+{
+    return (s << m.getString());
+}
+
 
 //
 // FastMatrix class implementation. Preserves state. Requires additional memory.
