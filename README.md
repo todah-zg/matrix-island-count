@@ -40,15 +40,15 @@ Some basic unit tests are provided using [GoogleTest](https://google.github.io/g
     - [CMake](https://cmake.org/) and [Make](https://www.gnu.org/software/make/)
 2. Clone the project locally (e.g. to the `matrix-project` folder)
 3. Setup CMake and fetch dependencies (GoogleTest)
-```bash
+ ```bash
 cd matrix-project
 cmake -S . -B build
 ```
 4. Build the project
-```bash
+ ```bash
 cmake --build build
 ```
 5. Execute the tests
-```bash
+ ```bash
 cd build && ctest
 ```
