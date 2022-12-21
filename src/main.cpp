@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// TODO bacit u smece
+
 int main(void) {
   vector<vector<int>> v = {{1,0,1,0,1},
                            {0,1,0,1,0},
@@ -35,10 +35,3 @@ l.print();
 return 0;
 }
 
-
-
-
-// TODO: tests
-// TODO: comments
-// akon te jako veseli onda mozes paralizaciju
-// std::thread
