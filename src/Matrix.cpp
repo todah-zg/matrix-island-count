@@ -22,71 +22,67 @@ matrix::Matrix::Matrix(const std::vector<std::vector<int>> &_elements)
 
 // matrix::Matrix::~Matrix(){}
 
-bool matrix::Matrix::isSet(const matrix::position_t &position) const
+bool matrix::Matrix::isSet(const matrix::position &position) const
 {
-    return mElements[position.x][position.y] == 1;
+    return mElements[position.x][position.y] == ::matrix::State::set;
 }
 
-bool matrix::Matrix::isValidPosition(const matrix::position_t &position) const
+bool matrix::Matrix::isValidPosition(const matrix::position &position) const
 {
     return (position.x >= 0 && position.x < mRows &&
             position.y >= 0 && position.y < mCols);
 }
 
-std::vector<matrix::position_t> matrix::Matrix::getAllElementPositions()
+std::vector<matrix::position> matrix::Matrix::getAllElementPositions()
 {
 
-    std::vector<matrix::position_t> positions;
+    std::vector<matrix::position> positions;
     for (int x = 0; x < mRows; ++x)
     { // i
         for (int y = 0; y < mCols; ++y)
         { // j
-            matrix::position_t pos = {x, y};
-            positions.push_back(pos);
+            positions.emplace_back(x, y);
         }
     }
 
     return positions;
 }
 
-bool matrix::Matrix::isProcessed(const matrix::position_t &position) const
+bool matrix::Matrix::isProcessed(const matrix::position &position) const
 {
-    return mElements[position.x][position.y] == 2;
+    return mElements[position.x][position.y] == ::matrix::State::visited;
 }
 
-void matrix::Matrix::markAsProcessed(const matrix::position_t &position)
+void matrix::Matrix::markAsProcessed(const matrix::position &position)
 {
-    mElements[position.x][position.y] = 2;
+    mElements[position.x][position.y] = ::matrix::State::visited;
 }
 
-std::vector<matrix::position_t> matrix::Matrix::getNeighbourElements(const matrix::position_t &position)
+std::vector<matrix::position> matrix::Matrix::getNeighbourElements(const matrix::position &position)
 {
     int offset_x[] = {0, 0, -1, 1};
     int offset_y[] = {-1, 1, 0, 0};
     int offset_steps = 4;
-    std::vector<matrix::position_t> neighbours;
+    std::vector<matrix::position> neighbours;
 
     for (int i = 0; i < offset_steps; ++i)
     {
-        matrix::position_t newPosition;
-        newPosition.x = position.x + offset_x[i];
-        newPosition.y = position.y + offset_y[i];
-        neighbours.push_back(newPosition);
+        neighbours.emplace_back(position.x + offset_x[i], position.y + offset_y[i]);
     }
 
     return neighbours;
 }
 
-void matrix::Matrix::processAllConnectedElements(const matrix::position_t &startPosition)
+void matrix::Matrix::processAllConnectedElements(const matrix::position &startPosition)
 {
 
-    std::queue<matrix::position_t> searchQueue;
+    std::queue<matrix::position> searchQueue;
     searchQueue.push(startPosition);
     markAsProcessed(startPosition);
 
     while (!searchQueue.empty())
     {
-        matrix::position_t position = searchQueue.front();
+        matrix::position position = searchQueue.front();
         searchQueue.pop();
 
         for (auto curPosition : getNeighbourElements(position))
@@ -120,16 +116,29 @@ int matrix::Matrix::countFigures()
     return count;
 }
 
-void matrix::Matrix::print()
+std::string matrix::Matrix::getString()
 {
+    std::stringstream ss;
+
+    ss << "{";
     for (int i = 0; i < mRows; i++)
     {
+        ss << "{";
         for (int j = 0; j < mCols; j++)
         {
-            printf("%d ", mElements[i][j]);
+            if (j == 0){
+                ss << mElements[i][j];
+            } else {
+                ss << ", " << mElements[i][j];
+            }
         }
-        printf("\n");
+        if (i == mRows - 1) {
+            ss << "}}";
+        } else {
+            ss << "},\n ";
+        }
     }
+    return ss.str();
 }
 
 //
@@ -139,14 +148,14 @@ void matrix::Matrix::print()
 matrix::FastMatrix::FastMatrix(const std::vector<std::vector<int>> &_elements)
     : Matrix(_elements), mElementsBackup(_elements){};
 
-bool matrix::FastMatrix::isProcessed(const matrix::position_t &position) const
+bool matrix::FastMatrix::isProcessed(const matrix::position &position) const
 {
-    return mElementsBackup[position.x][position.y] == 2;
+    return mElementsBackup[position.x][position.y] == ::matrix::State::visited;
 }
 
-void matrix::FastMatrix::markAsProcessed(const matrix::position_t &position)
+void matrix::FastMatrix::markAsProcessed(const matrix::position &position)
 {
-    mElementsBackup[position.x][position.y] = 2;
+    mElementsBackup[position.x][position.y] = ::matrix::State::visited;
 }
 
 void matrix::FastMatrix::reset()
@@ -169,23 +178,13 @@ int matrix::FastMatrix::countFigures()
 matrix::LeanMatrix::LeanMatrix(const std::vector<std::vector<int>> &_elements)
     : Matrix(_elements){};
 
-bool matrix::LeanMatrix::isProcessed(const matrix::position_t &position) const
-{
-    return mElements[position.x][position.y] >= 2;
-}
-
-void matrix::LeanMatrix::markAsProcessed(const matrix::position_t &position)
-{
-    mElements[position.x][position.y] += 2;
-}
-
 void matrix::LeanMatrix::reset()
 {
     for (auto position : getAllElementPositions())
     {
         if (isProcessed(position))
         {
-            mElements[position.x][position.y] -= 2;
+            mElements[position.x][position.y] = ::matrix::State::set;
         }
     }
 }

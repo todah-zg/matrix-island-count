@@ -14,20 +14,24 @@
 
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include <queue>
 
 namespace matrix
 {
 
     /**
-     * @brief Simple struct type to track position in a 2D matrix
+     * @brief Simple struct to track position in a 2D matrix
      *
      */
-    typedef struct
+    struct position
     {
         int x;
         int y;
-    } position_t;
+
+        position(int _x, int _y) : x(_x), y(_y){} 
+
+    };
 
     /**
      * @brief 2D matrix to store topographical data represented as elements
@@ -49,7 +53,7 @@ namespace matrix
          * @return true
          * @return false
          */
-        bool isSet(const position_t &position) const;
+        bool isSet(const position &position) const;
 
         /**
          * @brief Check that a given position is not out of bounds
@@ -58,14 +62,14 @@ namespace matrix
          * @return true
          * @return false
          */
-        bool isValidPosition(const position_t &position) const;
+        bool isValidPosition(const position &position) const;
 
         /**
          * @brief Get the list of all possible element positions
          *
          * @return std::vector<position_t>
          */
-        std::vector<position_t> getAllElementPositions();
+        std::vector<position> getAllElementPositions();
 
         /**
          * @brief Check if a given position has alread been visited to avoid
@@ -75,7 +79,7 @@ namespace matrix
          * @return true
          * @return false
          */
-        virtual bool isProcessed(const position_t &position) const;
+        virtual bool isProcessed(const position &position) const;
 
         /**
          * @brief Mark a given position as already processed.
@@ -83,7 +87,7 @@ namespace matrix
          *
          * @param position
          */
-        virtual void markAsProcessed(const position_t &position);
+        virtual void markAsProcessed(const position &position);
 
         /**
          * @brief Get the list of all Neighbouring elements
@@ -91,7 +95,7 @@ namespace matrix
          * @param position
          * @return std::vector<position_t>
          */
-        std::vector<position_t> getNeighbourElements(const position_t &position);
+        std::vector<position> getNeighbourElements(const position &position);
 
         /**
          * @brief Process all neighbouring elements connected to a given position,
@@ -99,7 +103,7 @@ namespace matrix
          *
          * @param position
          */
-        void processAllConnectedElements(const position_t &position);
+        void processAllConnectedElements(const position &position);
 
     public:
         /**
@@ -117,10 +121,10 @@ namespace matrix
         virtual int countFigures();
 
         /**
-         * @brief Prints out the matrix
+         * @brief Returns the string representation of the 2D matrix
          *
          */
-        void print();
+        std::string getString();
 
     }; // class Matrix
 
@@ -144,7 +148,7 @@ namespace matrix
          * @return true
          * @return false
          */
-        bool isProcessed(const position_t &position) const override;
+        bool isProcessed(const position &position) const override;
 
         /**
          * @brief Mark a given position as already processed.
@@ -152,7 +156,7 @@ namespace matrix
          *
          * @param position
          */
-        void markAsProcessed(const position_t &position) override;
+        void markAsProcessed(const position &position) override;
 
         /**
          * @brief Resets the original state of the mElementsBackup
@@ -190,7 +194,7 @@ namespace matrix
          * @return true
          * @return false
          */
-        bool isProcessed(const position_t &position) const override;
+        bool isProcessed(const position &position) const override;
 
         /**
          * @brief Mark a given position as already processed.
@@ -198,7 +202,7 @@ namespace matrix
          *
          * @param position
          */
-        void markAsProcessed(const position_t &position) override;
+        void markAsProcessed(const position &position) override;
 
         /**
          * @brief Resets the original state of the mElements
