@@ -7,25 +7,38 @@ using namespace std;
 
 // TODO bacit u smece
 int main(void) {
-  auto v = vector<vector<int>>();
-  int x = 2;
-  int y = 3;
-  for (int i = 0; i < x; i ++ ) {
-    for (int j = 0; j < y; ++j) {
-      int a;
-      scanf("%d", &a);
-      if (j == 0)v.push_back(vector<int>());
-      v[i].push_back(a);
-    }
-  }
-  auto m = matrix::Matrix(v);
+  vector<vector<int>> v = {{1,0,1,0,1},
+                           {0,1,0,1,0},
+                           {1,0,1,0,1},
+                           {0,1,0,1,0},
+                           {1,0,1,0,1}};
 
-  printf("DONE %d\n", m.countFigures());
-  for (int i = 0; i < x; i ++ ) {
-    for (int j = 0; j < y; ++j) {
-      printf("%d ", v[i][j]);
-    }
-    printf("\n");
-  }
-  return 0;
+ auto m = matrix::Matrix(v);
+printf("Matrix \n");
+m.print();
+ printf("DONE %d\n", m.countFigures());
+m.print();
+
+auto f = matrix::FastMatrix(v);
+printf("\n\nFAST Matrix \n");
+f.print();
+ printf("DONE %d\n", f.countFigures());
+f.print();
+
+
+auto l = matrix::LeanMatrix(v);
+printf("\n\nLEAN Matrix \n");
+l.print();
+ printf("DONE %d\n", l.countFigures());
+l.print();
+
+return 0;
 }
+
+
+
+
+// TODO: tests
+// TODO: comments
+// akon te jako veseli onda mozes paralizaciju
+// std::thread
