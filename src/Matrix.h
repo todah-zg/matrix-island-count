@@ -29,7 +29,6 @@ namespace matrix
         int y;
     } position_t;
 
-
     /**
      * @brief 2D matrix to store topographical data represented as elements
      *        that are either set or unset. Allows counting the connected figures.
@@ -50,8 +49,7 @@ namespace matrix
          * @return true
          * @return false
          */
-        bool isSet(const position_t& position) const;
-
+        bool isSet(const position_t &position) const;
 
         /**
          * @brief Check that a given position is not out of bounds
@@ -60,8 +58,7 @@ namespace matrix
          * @return true
          * @return false
          */
-        bool isValidPosition(const position_t& position) const;
-
+        bool isValidPosition(const position_t &position) const;
 
         /**
          * @brief Get the list of all possible element positions
@@ -69,7 +66,6 @@ namespace matrix
          * @return std::vector<position_t>
          */
         std::vector<position_t> getAllElementPositions();
-
 
         /**
          * @brief Check if a given position has alread been visited to avoid
@@ -79,8 +75,7 @@ namespace matrix
          * @return true
          * @return false
          */
-        virtual bool isProcessed(const position_t& position) const;
-
+        virtual bool isProcessed(const position_t &position) const;
 
         /**
          * @brief Mark a given position as already processed.
@@ -88,8 +83,7 @@ namespace matrix
          *
          * @param position
          */
-        virtual void markAsProcessed(const position_t& position);
-
+        virtual void markAsProcessed(const position_t &position);
 
         /**
          * @brief Get the list of all Neighbouring elements
@@ -97,8 +91,7 @@ namespace matrix
          * @param position
          * @return std::vector<position_t>
          */
-        std::vector<position_t> getNeighbourElements(const position_t& position);
-
+        std::vector<position_t> getNeighbourElements(const position_t &position);
 
         /**
          * @brief Process all neighbouring elements connected to a given position,
@@ -106,17 +99,15 @@ namespace matrix
          *
          * @param position
          */
-        void processAllConnectedElements(const position_t& position);
+        void processAllConnectedElements(const position_t &position);
 
     public:
- 
         /**
          * @brief Construct a new Matrix object
          *
          * @param elements
          */
-        Matrix(const std::vector<std::vector<int>>& elements);
-
+        Matrix(const std::vector<std::vector<int>> &elements);
 
         /**
          * @brief Returns the number of connected figures in the matrix
@@ -125,7 +116,6 @@ namespace matrix
          */
         virtual int countFigures();
 
-
         /**
          * @brief Prints out the matrix
          *
@@ -133,9 +123,6 @@ namespace matrix
         void print();
 
     }; // class Matrix
-
-
-
 
     /**
      * @brief Matrix implementation that perserves the original state by creating
@@ -152,42 +139,39 @@ namespace matrix
         /**
          * @brief Check if the given position has already been visited.
          *        This is tracked in the elementsBackup matrix.
-         * 
-         * @param position 
-         * @return true 
-         * @return false 
+         *
+         * @param position
+         * @return true
+         * @return false
          */
-        bool isProcessed(const position_t& position) const override;
+        bool isProcessed(const position_t &position) const override;
 
         /**
          * @brief Mark a given position as already processed.
          *        This is tracked in the elementsBackup matrix.
-         * 
-         * @param position 
+         *
+         * @param position
          */
-        void markAsProcessed(const position_t& position) override;
+        void markAsProcessed(const position_t &position) override;
 
         /**
          * @brief Resets the original state of the mElementsBackup
-         * 
+         *
          */
         void reset();
 
     public:
-        FastMatrix(const std::vector<std::vector<int>>& elements);
-        
+        FastMatrix(const std::vector<std::vector<int>> &elements);
+
         /**
          * @brief Returns the number of connected figures in the matrix.
          *        Resets the original state afterwards.
-         * 
-         * @return int 
+         *
+         * @return int
          */
         int countFigures() override;
 
     }; // class FastMatrix
-
-
-
 
     /**
      * @brief Matrix implementation that perserves the original state by modifying
@@ -199,38 +183,37 @@ namespace matrix
     {
 
     private:
-
         /**
          * @brief Check if the given position has already been visited.
-         * 
-         * @param position 
-         * @return true 
-         * @return false 
+         *
+         * @param position
+         * @return true
+         * @return false
          */
-        bool isProcessed(const position_t& position) const override;
+        bool isProcessed(const position_t &position) const override;
 
         /**
          * @brief Mark a given position as already processed.
          *        Temporarily changes mElements.
-         * 
-         * @param position 
+         *
+         * @param position
          */
-        void markAsProcessed(const position_t& position) override;
+        void markAsProcessed(const position_t &position) override;
 
         /**
          * @brief Resets the original state of the mElements
-         * 
+         *
          */
         void reset();
 
     public:
-        LeanMatrix(const std::vector<std::vector<int>>& elements);
+        LeanMatrix(const std::vector<std::vector<int>> &elements);
 
         /**
          * @brief Returns the number of connected figures in the matrix.
          *        Resets the original state afterwards.
-         * 
-         * @return int 
+         *
+         * @return int
          */
         int countFigures() override;
 
