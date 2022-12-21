@@ -2,36 +2,26 @@
 #include <cstdio>
 #include <vector>
 #include <iostream>
+#include <chrono>
 
 using namespace std;
 
+int main(void)
+{
+    int max = 30;
+    vector<vector<int>> v(max, vector<int>(max));
 
-int main(void) {
-  vector<vector<int>> v = {{1,0,1,0,1},
-                           {0,1,0,1,0},
-                           {1,0,1,0,1},
-                           {0,1,0,1,0},
-                           {1,0,1,0,1}};
+    for (int i = 0; i < max; i++)
+    {
+        for (int j = 0; j < max; j++)
+        {
+            v[i][j] = rand() % 2;
+        }
+    }
 
- auto m = matrix::Matrix(v);
-printf("Matrix \n");
-m.print();
- printf("DONE %d\n", m.countFigures());
-m.print();
-
-auto f = matrix::FastMatrix(v);
-printf("\n\nFAST Matrix \n");
-f.print();
- printf("DONE %d\n", f.countFigures());
-f.print();
-
-
-auto l = matrix::LeanMatrix(v);
-printf("\n\nLEAN Matrix \n");
-l.print();
- printf("DONE %d\n", l.countFigures());
-l.print();
+    auto m = matrix::Matrix(v);
+    std::cout << m;
 
 return 0;
-}
 
+}
